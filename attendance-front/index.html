@@ -17,6 +17,8 @@
         th { background: #f8f9fa; }
         .status { padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; }
         .status-active { background: #e7f3ff; color: #1877f2; }
+        .btn-checkout { background: #ffc107; color: black; font-size: 0.8em; padding: 5px 10px; }
+        .btn-checkout:hover { background: #e0a800; }
     </style>
 </head>
 <body>
@@ -37,6 +39,7 @@
             <th>Ubicación</th>
             <th>Fecha/Hora</th>
             <th>Estado</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody id="historyBody"></tbody>
@@ -57,6 +60,10 @@
                         <td>${record.locationId}</td>
                         <td>${new Date(record.checkInTime).toLocaleString()}</td>
                         <td><span class="status status-active">${record.status}</span></td>
+                        <td>
+                            ${record.status === 'ACTIVE' || record.status === 'PRESENT' ? 
+                                `<button class="btn-checkout" onclick="checkOut('${record.id}')">Check-out</button>` : ''}
+                        </td>
                     </tr>
                 `).join('');
         } catch (err) { alert('Error al conectar con la API'); }
@@ -74,6 +81,23 @@
             body: JSON.stringify(body)
         });
         loadHistory();
+    }
+
+    async function checkOut(id) {
+        try {
+            const response = await fetch(`${API_URL}/${id}/checkout`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(new Date().toISOString())
+            });
+            if (response.ok) {
+                loadHistory();
+            } else {
+                alert('Error al realizar check-out');
+            }
+        } catch (err) {
+            alert('Error al conectar con la API');
+        }
     }
 
     loadHistory();

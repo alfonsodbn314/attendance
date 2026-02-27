@@ -18,4 +18,15 @@ public record Attendance(
             status = "PRESENT"; // Valor por defecto según el nuevo dominio
         }
     }
+
+    public Attendance checkOut() {
+        return new Attendance(
+                this.id,
+                this.employeeId,
+                this.locationId,
+                this.checkInTime,
+                LocalDateTime.now(),
+                "COMPLETED"
+        );
+    }
 }

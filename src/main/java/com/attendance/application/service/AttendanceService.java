@@ -1,6 +1,7 @@
 package com.attendance.application.service;
 
 import com.attendance.application.port.in.CompleteAttendanceUseCase;
+import com.attendance.application.port.in.GetAttendanceHistoryUseCase;
 import com.attendance.application.port.in.RegisterAttendanceUseCase;
 import com.attendance.application.port.out.AttendanceOutputPort;
 import com.attendance.application.port.out.AttendancePersistencePort;
@@ -8,10 +9,11 @@ import com.attendance.domain.model.Attendance;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AttendanceService implements RegisterAttendanceUseCase, CompleteAttendanceUseCase {
+public class AttendanceService implements RegisterAttendanceUseCase, CompleteAttendanceUseCase, GetAttendanceHistoryUseCase {
 
     private final AttendancePersistencePort persistencePort;
     private final AttendanceOutputPort outputPort;
@@ -39,21 +41,18 @@ public class AttendanceService implements RegisterAttendanceUseCase, CompleteAtt
     @Override
     public Attendance execute(UUID id, LocalDateTime checkOutTime) {
         // 1. Buscar el registro existente
-        Attendance attendance = persistencePort.findById(String.valueOf(id))
-                .orElseThrow(() -> new RuntimeException("Registro de asistencia no encontrado"));
+        Attendance attendance = persistencePort.findById(id.toString())
+                .orElseThrow(() -> new IllegalArgumentException("Attendance not found with id: " + id));
 
         // 2. Aplicar lógica de dominio para completar la salida
-        // Creamos un nuevo record con los datos actualizados ya que Attendance es inmutable
-        Attendance updatedAttendance = new Attendance(
-                attendance.id(),
-                attendance.employeeId(),
-                attendance.locationId(),
-                attendance.checkInTime(),
-                checkOutTime,
-                "COMPLETED"
-        );
+        Attendance updatedAttendance = attendance.checkOut();
 
         // 3. Guardar cambios
         return persistencePort.save(updatedAttendance);
+    }
+
+    @Override
+    public List<Attendance> execute() {
+        return persistencePort.findAll();
     }
 }

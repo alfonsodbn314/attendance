@@ -1,6 +1,7 @@
 package com.attendance.infrastructure.adapter.input.rest.controller;
 
 import com.attendance.application.port.in.CompleteAttendanceUseCase;
+import com.attendance.application.port.in.GetAttendanceHistoryUseCase;
 import com.attendance.application.port.in.RegisterAttendanceUseCase;
 import com.attendance.infrastructure.adapter.input.rest.dto.AttendanceRequest;
 import com.attendance.infrastructure.adapter.input.rest.dto.AttendanceResponse;
@@ -27,6 +28,7 @@ public class AttendanceController {
 
     private final RegisterAttendanceUseCase registerUseCase;
     private final CompleteAttendanceUseCase completeUseCase;
+    private final GetAttendanceHistoryUseCase getHistoryUseCase;
     private final AttendanceRestMapper mapper;
 
     @PostMapping
@@ -73,8 +75,7 @@ public class AttendanceController {
     @GetMapping
     @Operation(summary = "Historial Global de Asistencias", description = "Retorna un listado de todas las asistencias registradas en la base de datos.")
     public ResponseEntity<List<AttendanceResponse>> findAll() {
-        // Aquí llamarías a un RetrieveAttendanceUseCase en el futuro
-        // Por ahora devolvemos una lista vacía para no romper la compilación
-        return ResponseEntity.ok(List.of());
+        var attendanceList = getHistoryUseCase.execute();
+        return ResponseEntity.ok(mapper.toResponseList(attendanceList));
     }
 }
