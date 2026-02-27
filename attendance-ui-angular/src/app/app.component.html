@@ -1,0 +1,51 @@
+<div class="container">
+  <h1>Control de Asistencia Universitaria (Angular)</h1>
+
+  <div class="form-group">
+    <input type="text" [(ngModel)]="newAttendance.employeeId" placeholder="ID (Estudiante/Profesor)">
+    <input type="text" [(ngModel)]="newAttendance.locationId" placeholder="Ubicación (Aula/Oficina)">
+    <button class="btn-primary" (click)="register()">Registrar Entrada</button>
+  </div>
+
+  <button class="btn-refresh" (click)="loadAttendance()">Actualizar Tabla</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Ubicación</th>
+        <th>Fecha/Hora</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (record of attendanceList(); track record.id) {
+        <tr>
+          <td>{{ record.employeeId }}</td>
+          <td>{{ record.locationId }}</td>
+          <td>{{ record.checkInTime | date:'short' }}</td>
+          <td>
+            <span class="status" [ngClass]="{
+              'status-active': record.status === 'ACTIVE' || record.status === 'PRESENT',
+              'status-completed': record.status === 'COMPLETED'
+            }">
+              {{ record.status }}
+            </span>
+          </td>
+          <td>
+            @if (record.status === 'ACTIVE' || record.status === 'PRESENT') {
+              <button class="btn-checkout" (click)="checkOut(record.id)">Salida</button>
+            } @else {
+              <span class="text-muted">Finalizado</span>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" style="text-align: center;">No hay registros de asistencia</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
