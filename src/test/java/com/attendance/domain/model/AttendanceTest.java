@@ -1,5 +1,6 @@
 package com.attendance.domain.model;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
@@ -52,4 +53,25 @@ class AttendanceTest {
         assertNotNull(attendance);
         assertEquals("PRESENT", attendance.status());
     }
+    @Test
+    @DisplayName("Debería fallar si el ID de empleado es nulo o vacío")
+    void shouldThrowExceptionWhenEmployeeIdIsInvalid() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Attendance("4", null, "LOC-01", LocalDateTime.now(), null, "PRESENT")
+        );
+    }
+    @Test
+    @DisplayName("Debería actualizar el estado a COMPLETED al marcar salida")
+    void shouldUpdateStatusToCompletedOnCheckOut() {
+        // Arrange
+        Attendance attendance = new Attendance("5", "EMP-005", "LOC-05", LocalDateTime.now(), null, "PRESENT");
+
+        // Act
+        Attendance completed = attendance.checkOut(); // Asumiendo que devuelve un nuevo objeto o modifica el actual
+
+        // Assert
+        assertEquals("COMPLETED", completed.status());
+        assertNotNull(completed.checkOutTime());
+    }
+
 }

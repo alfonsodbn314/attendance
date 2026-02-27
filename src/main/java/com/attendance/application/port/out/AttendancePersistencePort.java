@@ -10,4 +10,5 @@ public interface AttendancePersistencePort {
     List<Attendance> findAll();
     Attendance save(Attendance reservation);
     Optional<Attendance> findById(String id);
+    Optional<Attendance> findActiveByEmployeeId(String employeeId);
 }

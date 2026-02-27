@@ -5,6 +5,8 @@ import com.attendance.application.port.in.GetAttendanceHistoryUseCase;
 import com.attendance.application.port.in.RegisterAttendanceUseCase;
 import com.attendance.application.port.out.AttendanceOutputPort;
 import com.attendance.application.port.out.AttendancePersistencePort;
+import com.attendance.domain.exception.AttendanceAlreadyActiveException;
+import com.attendance.domain.exception.AttendanceNotFoundException;
 import com.attendance.domain.model.Attendance;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,11 @@ public class AttendanceService implements RegisterAttendanceUseCase, CompleteAtt
 
     @Override
     public Attendance register(Attendance attendance) {
-        // 1. Aquí a futuro pondremos reglas de negocio (ej. validar si ya tiene check-in)
+        // 1. Validar si ya tiene una asistencia activa (PRESENT)
+        persistencePort.findActiveByEmployeeId(attendance.employeeId())
+                .ifPresent(a -> {
+                    throw new AttendanceAlreadyActiveException(attendance.employeeId());
+                });
 
         // 2. Guardamos en la base de datos usando el puerto de salida
         Attendance savedAttendance = persistencePort.save(attendance);
@@ -42,7 +48,7 @@ public class AttendanceService implements RegisterAttendanceUseCase, CompleteAtt
     public Attendance execute(UUID id, LocalDateTime checkOutTime) {
         // 1. Buscar el registro existente
         Attendance attendance = persistencePort.findById(id.toString())
-                .orElseThrow(() -> new IllegalArgumentException("Attendance not found with id: " + id));
+                .orElseThrow(() -> new AttendanceNotFoundException(id.toString()));
 
         // 2. Aplicar lógica de dominio para completar la salida
         Attendance updatedAttendance = attendance.checkOut();

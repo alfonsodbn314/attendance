@@ -36,6 +36,12 @@ public class AttendancePersistenceAdapter implements AttendancePersistencePort {
         return repository.findById(UUID.fromString(id)).map(this::toDomain);
     }
 
+    @Override
+    public Optional<Attendance> findActiveByEmployeeId(String employeeId) {
+        return repository.findByEmployeeIdAndStatus(employeeId, "PRESENT")
+                .map(this::toDomain);
+    }
+
     private Attendance toDomain(AttendanceEntity e) {
         return new Attendance(
                 e.getId() != null ? e.getId().toString() : null,
