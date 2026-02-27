@@ -1,71 +1,25 @@
-Parking Reservation Management System
-This project is a REST API developed with Java and Spring Boot for managing parking space reservations. The system utilizes Hexagonal Architecture to ensure decoupling and long-term maintainability.
-
-Architecture
-The design follows the Ports and Adapters pattern, separating technical concerns from core business rules.
-
-Layer Structure
-Domain: The core of the system containing pure business logic and models such as Reservation. It has no dependencies on external frameworks.
-
-Application: Defines Use Cases (Input Ports) and output interfaces (Output Ports) for infrastructure communication.
-
-Infrastructure: Contains technical implementations.
-
-Input Adapters: REST Controllers and DTOs with schema validations.
-
-Output Adapters: PostgreSQL persistence and external service clients.
-
-Technical Specifications
-Java 25 (LTS)
-
-Spring Boot 4.0.x
-
-Spring Data JPA
-
-PostgreSQL 17
-
-Docker and Docker Compose
-
-SpringDoc OpenAPI (Swagger UI)
-
-Jakarta Validation 3.1
-
-MapStruct for object mapping
-
-System Requirements
-Java Development Kit (JDK) 25
-
-Maven 3.9.x or higher
-
-Container runtime environment (Docker)
-
-Configuration Guide
-1. Database Infrastructure
-To deploy the PostgreSQL database, run the following command in the project root:
-
-Bash
-docker-compose up -d
-
-2. Running the Service
-To start the application, use the Maven command:
-
-Bash
-./mvnw spring-boot:run
-The service will start by default on port 8080.
-
-API Documentation
-The OpenAPI specification is available interactively via Swagger UI at the following path:
-
-http://localhost:8080/swagger-ui/index.html
-
-Available Operations
-POST /api/v1/reservations: Registers a new reservation, validating availability and format.
-
-GET /api/v1/reservations: Retrieves the history of reservations processed by the system.
-
-Development Notes
-Identifier Management: UUID (Universally Unique Identifier) is used to ensure reservation uniqueness across distributed systems.
-
-Validation: The system employs the Jakarta standard to reject malformed requests before they reach the application layer.
-
-Mapping: Separation between DTOs and domain models is managed via dedicated mappers to prevent persistence details from leaking into the API.
+University Attendance Management System (API de Control de Asistencia)
+This project is a high-performance REST API developed with Java 25 and Spring Boot 4 
+for managing university attendance records. 
+It provides specialized tracking for Students, Administrative Staff, and Professors.
+The system utilizes Hexagonal Architecture (Ports and Adapters)
+to ensure business logic remains decoupled from infrastructure and technical frameworks. 
+ArchitectureThe design separates technical concerns from core business rules through 
+three distinct layers:Domain: The core containing pure business logic and the Attendance entity. 
+No external dependencies.Application: Orchestrates Use Cases (RegisterAttendance, CompleteAttendance)
+through Input and Output ports.Infrastructure: Technical implementations including:Input Adapters: 
+REST Controllers and DTOs with Jakarta Validation.Output Adapters: PostgreSQL persistence (Spring Data JPA) 
+and external notification Gateways.Technical SpecificationsJava 25 (LTS)Spring Boot 4.0.3Spring Data JPA / Hibernate 7
+PostgreSQL 15 (Containerized)Docker & Docker ComposeSpringDoc OpenAPI / Swagger UILombokMapStruct 
+Getting StartedPrerequisitesJDK 25Maven 3.9+Docker Desktop1. Database InfrastructureDeploy the PostgreSQL
+container using Docker Compose:Bashdocker-compose up -d The database will be available at localhost:5433
+with the name attendance_db.2. Running the ApplicationStart the service using 
+the Maven wrapper:Bash./mvnw spring-boot:run The service starts on port 8080 by default. 
+API DocumentationOnce the service is running, explore and test the endpoints via Swagger UI: 
+http://localhost:8080/swagger-ui/index.htmlAvailable OperationsMethodEndpointDescriptionPOST/api/v1/attendanceCheck-in:
+Register entry for a Student, Professor, or Admin.PATCH/api/v1/attendance/{id}/checkoutCheck-out: 
+Register exit time and update status to COMPLETED.GET/api/v1/attendanceHistory: 
+Retrieve all attendance records from the system. 
+User ProfilesThe system is designed to handle different logic based on user roles:Estudiante (Student): 
+Attendance tied to classroom locations.Catedrático (Professor): Flexible session management.
+Administrativo (Admin): Workplace attendance tracking.
