@@ -1,0 +1,100 @@
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h1 {
+  color: #007bff;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-refresh {
+  background: #28a745;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.btn-checkout {
+  background: #ffc107;
+  color: black;
+  font-size: 0.8em;
+  padding: 5px 10px;
+}
+
+.btn-checkout:hover {
+  background: #e0a800;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #dee2e6;
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background: #f8f9fa;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.status-active {
+  background: #e7f3ff;
+  color: #1877f2;
+}
+
+.status-completed {
+  background: #e4e6eb;
+  color: #65676b;
+}
+
+.text-muted {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 0.9em;
+}
